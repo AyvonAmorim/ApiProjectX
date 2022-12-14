@@ -1,0 +1,11 @@
+{
+  "name": "apiprojectx",
+  "version": "1.0.0",
+  "description": "api para sistema projectX",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ayvon Amorim",
+  "license": "ISC"
+}
