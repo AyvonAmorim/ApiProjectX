@@ -16,6 +16,7 @@ const UserSchema = new mongoose.Schema({
 	login: {
 		type: String,
 		required: true,
+		unique: true,
 	},
 	email: {
 		type: String,
@@ -41,12 +42,10 @@ const UserSchema = new mongoose.Schema({
 	AdmAccess: {
 		type: Boolean,
 		required: true,
-		select: false,
 	},
 	ActiveFarms: {
 		type: Array,
 		required: false,
-		select: false,
 	},
 	ImgPerfil: {
 		type: String,

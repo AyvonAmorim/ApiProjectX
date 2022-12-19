@@ -8,6 +8,7 @@ const multer = require("multer");
 //Import das Rotas
 const rotaClient = require("./routes/client-routes");
 const rotaUser = require("./routes/user-routes");
+const rotaAuth = require("./routes/auth-routes")
 
 connectDatabase();
 
@@ -57,6 +58,7 @@ const uploadPerfil = multer({
 app.use("/uploads", express.static('uploads'))
 app.use("/client", rotaClient);
 app.use("/user", uploadPerfil.single("img"), rotaUser);
+app.use("/auth", rotaAuth)
 
 // Tratamento de erro
 app.use((req, res, next) => {
