@@ -1,6 +1,7 @@
 const ClientService = require("../services/client-services");
 const config = require("../../config/config");
 const bcrypt = require('bcryptjs');
+const { application } = require("express");
 
 
 // Criar Cadastro de Cliente
@@ -20,6 +21,7 @@ const CreateClient = async (req, res) => {
         if(!admPassValid){
 			return res.status(400).send({ mensagem: "Senha de Administrador Invalida" });
         }
+
 
 		const Client = await ClientService.createClient(
 			name,

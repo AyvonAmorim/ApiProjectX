@@ -8,7 +8,8 @@ const multer = require("multer");
 //Import das Rotas
 const rotaClient = require("./routes/client-routes");
 const rotaUser = require("./routes/user-routes");
-const rotaAuth = require("./routes/auth-routes")
+const rotaAuth = require("./routes/auth-routes");
+const FarmRouter = require("./routes/farm-routes");
 
 connectDatabase();
 
@@ -47,7 +48,8 @@ const storagePerfil = multer.diskStorage({
 		cb(null, file.fieldname + "-" + Date.now() + req.body.nome + '.' + req.body.sobrenome + '.jpg');
 	},
 });
-const uploadPerfil = multer({
+const uploadPerfil = multer(
+	{
 	storage: storagePerfil,
 	limits: {
 		fileSize: 1024 * 1024 * 10,
@@ -57,8 +59,9 @@ const uploadPerfil = multer({
 //ROUTES
 app.use("/uploads", express.static('uploads'))
 app.use("/client", rotaClient);
-app.use("/user", uploadPerfil.single("img"), rotaUser);
-app.use("/auth", rotaAuth)
+app.use("/user", uploadPerfil.single("img.png"), rotaUser);
+app.use("/auth", rotaAuth);
+app.use("/farm", FarmRouter)
 
 // Tratamento de erro
 app.use((req, res, next) => {
