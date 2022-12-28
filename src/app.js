@@ -45,11 +45,19 @@ const storagePerfil = multer.diskStorage({
 		cb(null, "uploads");
 	},
 	filename: (req, file, cb) => {
-		cb(null, file.fieldname + "-" + Date.now() + req.body.nome + '.' + req.body.sobrenome + '.jpg');
+		cb(
+			null,
+			file.fieldname +
+				"-" +
+				Date.now() +
+				req.body.nome +
+				"." +
+				req.body.sobrenome +
+				".jpg"
+		);
 	},
 });
-const uploadPerfil = multer(
-	{
+const uploadPerfil = multer({
 	storage: storagePerfil,
 	limits: {
 		fileSize: 1024 * 1024 * 10,
@@ -57,11 +65,11 @@ const uploadPerfil = multer(
 });
 
 //ROUTES
-app.use("/uploads", express.static('uploads'))
+app.use("/uploads", express.static("uploads"));
 app.use("/client", rotaClient);
 app.use("/user", uploadPerfil.single("img"), rotaUser);
 app.use("/auth", rotaAuth);
-app.use("/farm", FarmRouter)
+app.use("/farm", FarmRouter);
 
 // Tratamento de erro
 app.use((req, res, next) => {
