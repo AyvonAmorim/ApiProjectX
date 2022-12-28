@@ -22,8 +22,7 @@ const createUser = (
 	});
 
 const findByClient = (client_id) =>
-	User.find({ client_id: client_id, AdmAccess: false });
-
+	User.find({ client_id: client_id, AdmAccess: false }).select('-login').select('-client_id').select('-AdmAccess').select('-email').select('-ActiveFarms').select('-__v')
 module.exports = {
 	createUser,
 	findByClient,
