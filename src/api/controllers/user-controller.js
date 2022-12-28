@@ -44,6 +44,12 @@ const CreateUser = async (req, res) => {
 			user: nome,
 		});
 	} catch (err) {
+		fs.unlink(req.file.path, (err) => {
+			if (err) {
+				console.log(err);
+			}
+		});
+		console.log(err.message)
 		res.status(500).send({ message: err.message });
 	}
 };

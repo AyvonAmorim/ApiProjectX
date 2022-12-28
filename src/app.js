@@ -59,7 +59,7 @@ const uploadPerfil = multer(
 //ROUTES
 app.use("/uploads", express.static('uploads'))
 app.use("/client", rotaClient);
-app.use("/user", uploadPerfil.single("img.png"), rotaUser);
+app.use("/user", uploadPerfil.single("img"), rotaUser);
 app.use("/auth", rotaAuth);
 app.use("/farm", FarmRouter)
 
@@ -74,7 +74,7 @@ app.use((error, req, res, next) => {
 	res.status(error.status || 500);
 	return res.send({
 		erro: {
-			mensagem: error.message,
+			mensagem: error,
 		},
 	});
 });
