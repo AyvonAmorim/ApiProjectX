@@ -56,30 +56,48 @@ const CreateUser = async (req, res) => {
 
 // Lista Usuários sem acesso administrativo.
 const ListUserNoAdm = async (req, res) => {
-	try{
+	try {
 		const client_id = req.params.client_id;
 
-		if(!client_id) {
-			return res.status(400).send({ mensagem: "Consulta Invalida"});
+		if (!client_id) {
+			return res.status(400).send({ mensagem: "Consulta Invalida" });
 		}
-		
+
 		const list = await userService.findByClient(client_id);
 
-		if(!list[0]) {
-			return res.status(404).send({ message: 'CLIENTE NÃO POSSUI USUÁRIOS CADASTRADOS'})
+		if (!list[0]) {
+			return res
+				.status(404)
+				.send({ message: "CLIENTE NÃO POSSUI USUÁRIOS CADASTRADOS" });
 		}
 
 		return res.status(200).send(list);
-
-	}
-	catch(error) {
+	} catch (error) {
 		res.status(500).send({ message: err.message });
 	}
-}
+};
+
+const ListAdmAccess = async (req, res) => {
+	try {
+		const user_id = req.params.user_id;
+
+		if (!user_id) {
+			return res.status(400).send({ mensagem: "Consulta Invalida" });
+		}
+
+		const AdmAccess = await userService.findAdmAccess(user_id);
 
 
+		return res.status(200).send(AdmAccess);
+
+		
+	} catch (error) {
+		res.status(500).send({ message: err.message });
+	}
+};
 
 module.exports = {
 	CreateUser,
 	ListUserNoAdm,
+	ListAdmAccess,
 };
