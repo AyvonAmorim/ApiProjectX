@@ -87,11 +87,27 @@ const ListAdmAccess = async (req, res) => {
 
 		const AdmAccess = await userService.findAdmAccess(user_id);
 
-
-		return res.status(200).send(AdmAccess);
-
-		
+		return res.status(200).send(AdmAccess.ActiveFarms);
 	} catch (error) {
+		res.status(500).send({ message: err.message });
+	}
+};
+
+//Edita a lista de acesso as fazendas
+
+const updateFarmAccess = async (req, res) => {
+	try {
+		const {ActiveFarms, user_id} = req.body
+
+		if(!ActiveFarms || !user_id){
+			return res.status(400).send({ mensagem: "Consulta Invalida" });
+		}
+
+		const editado = await userService.updateFarmAccess(ActiveFarms, user_id);
+
+		return res.status(200).send(editado);
+
+	} catch (err) {
 		res.status(500).send({ message: err.message });
 	}
 };
@@ -100,4 +116,5 @@ module.exports = {
 	CreateUser,
 	ListUserNoAdm,
 	ListAdmAccess,
+	updateFarmAccess,
 };

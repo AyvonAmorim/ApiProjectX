@@ -5,5 +5,6 @@ const UserRouter = express.Router();
 UserRouter.post("/", UserController.CreateUser); // Cria Usuário através do frontEnd
 UserRouter.get("/:client_id", UserController.ListUserNoAdm); // Lista Usuários de um determinado cliente
 UserRouter.get('/adm/:user_id',UserController.ListAdmAccess);
+UserRouter.post("/test", UserController.updateFarmAccess);
 
 module.exports = UserRouter;

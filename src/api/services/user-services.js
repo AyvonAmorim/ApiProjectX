@@ -42,10 +42,12 @@ const findAdmAccess = (user_id) =>
 		.select("-nome")
 		.select("-sobrenome");
 
-
+const updateFarmAccess = (accessList, user_id) =>
+	User.updateOne({ _id: user_id }, { ActiveFarms: accessList });
 
 module.exports = {
 	createUser,
 	findByClient,
 	findAdmAccess,
+	updateFarmAccess,
 };

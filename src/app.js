@@ -71,6 +71,7 @@ app.use("/user", uploadPerfil.single("img"), rotaUser);
 app.use("/auth", rotaAuth);
 app.use("/farm", FarmRouter);
 
+
 // Tratamento de erro
 app.use((req, res, next) => {
 	const erro = new Error("Rota Não Encontrada");
@@ -82,7 +83,7 @@ app.use((error, req, res, next) => {
 	res.status(error.status || 500);
 	return res.send({
 		erro: {
-			mensagem: error,
+			mensagem: error.message,
 		},
 	});
 });
