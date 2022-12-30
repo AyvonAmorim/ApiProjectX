@@ -105,7 +105,11 @@ const updateFarmAccess = async (req, res) => {
 
 		const editado = await userService.updateFarmAccess(ActiveFarms, user_id);
 
-		return res.status(200).send(editado);
+		if(editado.matchedCount === 0) {
+			return res.status(400).send({ mensagem: "Edição Invalida" });
+		}
+
+		return res.status(200).send({message: 'Acesso Editado'});
 
 	} catch (err) {
 		res.status(500).send({ message: err.message });
