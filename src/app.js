@@ -10,6 +10,7 @@ const rotaClient = require("./routes/client-routes");
 const rotaUser = require("./routes/user-routes");
 const rotaAuth = require("./routes/auth-routes");
 const FarmRouter = require("./routes/farm-routes");
+const RetiroRouter = require("./routes/retiro-routes");
 
 connectDatabase();
 
@@ -70,6 +71,7 @@ app.use("/client", rotaClient);
 app.use("/user", uploadPerfil.single("img"), rotaUser);
 app.use("/auth", rotaAuth);
 app.use("/farm", FarmRouter);
+app.use("/retiro", RetiroRouter);
 
 
 // Tratamento de erro

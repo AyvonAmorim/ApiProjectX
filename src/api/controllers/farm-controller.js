@@ -1,4 +1,5 @@
 const farmService = require("../services/farm-services");
+const cache = require('memory-cache');
 
 //Criar Fazenda no DB
 const CreateFarm = async (req, res) => {
@@ -21,6 +22,12 @@ const CreateFarm = async (req, res) => {
 //Listar Fazendas na tela
 const ListFarm = async (req, res) => {
 	const client_id = req.params.client_id;
+	const cacheResult = cache.get(client_id)
+
+	if(cacheResult && cacheResult.length > 0){
+		console.log('via cache')
+		return res.status(200).send(cacheResult);
+	}
 
 	try {
 		if (!client_id) {
@@ -35,9 +42,10 @@ const ListFarm = async (req, res) => {
 				.send({ mensagem: "CLIENTE NÃO POSSUI FAZENDAS CADASTRADAS" });
 		}
 
+		cache.put(client_id, list, 600000)
 		return res.status(200).send(list);
 	} catch (err) {
-		return res.status(500).send({ message: err.message });
+		return res.status(500).send({ message: err.error.message });
 	}
 };
 
