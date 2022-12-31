@@ -11,4 +11,5 @@ module.exports = {
         uri: process.env.DB_URI
     },
     AyvonPass: process.env.AYVON_ADMIN_PASS,
+    relic: process.env.RELIC
 }
