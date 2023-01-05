@@ -1,5 +1,6 @@
 const userService = require("../services/user-services");
 const fs = require("fs");
+const farmService = require("../services/farm-services");
 
 // Criar Usuário
 const CreateUser = async (req, res) => {
@@ -77,6 +78,7 @@ const ListUserNoAdm = async (req, res) => {
 	}
 };
 
+// Lista Acessos do usuário
 const ListAdmAccess = async (req, res) => {
 	try {
 		const user_id = req.params.user_id;
@@ -94,23 +96,45 @@ const ListAdmAccess = async (req, res) => {
 };
 
 //Edita a lista de acesso as fazendas
-
 const updateFarmAccess = async (req, res) => {
 	try {
-		const {ActiveFarms, user_id} = req.body
+		const { ActiveFarms, user_id } = req.body;
 
-		if(!ActiveFarms || !user_id){
+		if (!ActiveFarms || !user_id) {
 			return res.status(400).send({ mensagem: "Consulta Invalida" });
 		}
 
 		const editado = await userService.updateFarmAccess(ActiveFarms, user_id);
 
-		if(editado.matchedCount === 0) {
+		if (editado.matchedCount === 0) {
 			return res.status(400).send({ mensagem: "Edição Invalida" });
 		}
 
-		return res.status(200).send({message: 'Acesso Editado'});
+		return res.status(200).send({ message: "Acesso Editado" });
+	} catch (err) {
+		res.status(500).send({ message: err.message });
+	}
+};
 
+//Recebe a Lista de Acesso verifica o nome de cada fazenda e retorna array com nome e ID
+const ListAccessNames = async (req, res) => {
+	try {
+		const client_id = req.params.client_id;
+
+		if (!client_id) {
+			return res.status(400).send({ mensagem: "Consulta Invalida" });
+		}
+
+		const accessList = await userService.findAdmAccess(client_id);
+
+		accessList.index = [];
+
+		for (const elemento of accessList.ActiveFarms) {
+			const fazenda = await farmService.findById(elemento);
+			accessList.index.push(fazenda);
+		}
+
+		return res.status(200).send(accessList.index);
 	} catch (err) {
 		res.status(500).send({ message: err.message });
 	}
@@ -121,4 +145,5 @@ module.exports = {
 	ListUserNoAdm,
 	ListAdmAccess,
 	updateFarmAccess,
+	ListAccessNames,
 };
