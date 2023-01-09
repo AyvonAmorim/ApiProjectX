@@ -1,10 +1,9 @@
 const mongoose = require('mongoose');
 
-const RetiroSchema = new mongoose.Schema({
-	RetiroName: {
+const PastoSchema = new mongoose.Schema({
+	PastoName: {
 		type: String,
 		required: true,
-		unique: true,
 	},
 	client_id: {
 		type: mongoose.Schema.Types.ObjectId,
@@ -16,8 +15,13 @@ const RetiroSchema = new mongoose.Schema({
 		ref: 'fazendas',
 		required: true,
 	},
+	retiro_id: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'retiro',
+		required: true,
+	},
 });
 
-const Retiro = mongoose.model('Retiro', RetiroSchema);
+const Pasto = mongoose.model('Pasto', PastoSchema);
 
-module.exports = Retiro;
+module.exports = Pasto;

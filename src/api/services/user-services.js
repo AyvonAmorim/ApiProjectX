@@ -1,4 +1,4 @@
-const User = require("../models/user-model");
+const User = require('../models/user-model');
 
 const createUser = (
 	name,
@@ -23,24 +23,24 @@ const createUser = (
 
 const findByClient = (client_id) =>
 	User.find({ client_id: client_id, AdmAccess: false })
-		.select("-login")
-		.select("-client_id")
-		.select("-AdmAccess")
-		.select("-email")
-		.select("-ActiveFarms")
-		.select("-__v");
+		.select('-login')
+		.select('-client_id')
+		.select('-AdmAccess')
+		.select('-email')
+		.select('-ActiveFarms')
+		.select('-__v');
 
 const findAdmAccess = (user_id) =>
 	User.findById(user_id)
-		.select("-login")
-		.select("-client_id")
-		.select("-AdmAccess")
-		.select("-email")
-		.select("-ImgPerfil")
-		.select("-__v")
-		.select("-_id")
-		.select("-nome")
-		.select("-sobrenome");
+		.select('-login')
+		.select('-client_id')
+		.select('-AdmAccess')
+		.select('-email')
+		.select('-ImgPerfil')
+		.select('-__v')
+		.select('-_id')
+		.select('-nome')
+		.select('-sobrenome');
 
 const updateFarmAccess = (accessList, user_id) =>
 	User.updateOne({ _id: user_id }, { ActiveFarms: accessList });

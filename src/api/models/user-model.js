@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const bcrypt = require("bcryptjs");
+const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
 const validator = require('validator');
 
 const UserSchema = new mongoose.Schema({
@@ -25,7 +25,7 @@ const UserSchema = new mongoose.Schema({
 		lowercase: true,
 		validate: {
 			validator: validator.isEmail,
-			message: "Email invalido",
+			message: 'Email invalido',
 			isAsync: false,
 		},
 	},
@@ -35,9 +35,9 @@ const UserSchema = new mongoose.Schema({
 		select: false,
 	},
 	client_id: {
-        type: mongoose.Schema.Types.ObjectId,
+		type: mongoose.Schema.Types.ObjectId,
 		required: true,
-		ref: 'Clientes'
+		ref: 'Clientes',
 	},
 	AdmAccess: {
 		type: Boolean,
@@ -49,14 +49,17 @@ const UserSchema = new mongoose.Schema({
 	},
 	ImgPerfil: {
 		type: String,
-		required: false
-	}
+		required: false,
+	},
+	refreshToken: {
+		type: String,
+	},
 });
 
-UserSchema.pre("save", async function (next) {
+UserSchema.pre('save', async function (next) {
 	this.senha = await bcrypt.hash(this.senha, 10);
 });
 
-const User = mongoose.model("Usuário", UserSchema);
+const User = mongoose.model('Usuário', UserSchema);
 
 module.exports = User;
