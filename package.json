@@ -5,7 +5,7 @@
 	"main": "app.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"start": "nodemon -r newrelic server.js",
+		"start": "node -r newrelic server.js",
 		"format": "prettier --write \"**/*.{js,json,css}\"",
 		"format:check": "prettier --list-different \"**/*.{js,json,css}\"",
 		"precommit": "npm run format:check && git add"
