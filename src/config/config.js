@@ -11,5 +11,6 @@ module.exports = {
 		uri: process.env.DB_URI,
 	},
 	AyvonPass: process.env.AYVON_ADMIN_PASS,
-	relic: process.env.RELIC,
+	multerS3id: process.env.SECRET_ACCESS_S3_ID,
+	multerS3key: process.env.SECRET_ACCESS_S3_KEY,
 };

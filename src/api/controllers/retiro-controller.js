@@ -1,5 +1,4 @@
 const retiroService = require('../services/retiro-services');
-const cache = require('memory-cache');
 
 //Criar Retiro no BD
 const CreateRetiro = async (req, res) => {

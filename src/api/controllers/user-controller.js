@@ -1,6 +1,14 @@
 const userService = require('../services/user-services');
-const fs = require('fs');
 const farmService = require('../services/farm-services');
+const config = require('../../config/config');
+const aws= require("aws-sdk")
+
+const s3 = new aws.S3({
+    accessKeyId: config.multerS3id,
+    secretAccessKey: config.multerS3key,
+	region: 'us-east-1'
+});
+
 
 // Criar Usuário
 const CreateUser = async (req, res) => {
@@ -9,13 +17,16 @@ const CreateUser = async (req, res) => {
 			req.body;
 
 		const login = nome + '.' + sobrenome;
-		const img = req.file.path;
+		const img = req.file.location;
 
 		if (!nome || !sobrenome || !email || !senha || !client_id || !AdmAccess) {
-			fs.unlink(req.file.path, (err) => {
-				if (err) {
-					console.log(err);
-				}
+			const params = {
+				Bucket: 'api-projectx-hub',
+				Key: req.file.originalname,
+			};
+			s3.deleteObject(params, function (err, data) {
+				if (err) console.log(err, err.stack);
+				else console.log('Deleted Successfully', data);
 			});
 			return res.status(400).send({ mensagem: 'Envie todos os campos' });
 		}
@@ -32,10 +43,13 @@ const CreateUser = async (req, res) => {
 		);
 
 		if (!user) {
-			fs.unlink(req.file.path, (err) => {
-				if (err) {
-					console.log(err);
-				}
+			const params = {
+				Bucket: 'api-projectx-hub',
+				Key: req.file.originalname,
+			};
+			s3.deleteObject(params, function (err, data) {
+				if (err) console.log(err, err.stack);
+				else console.log('Deleted Successfully', data);
 			});
 			return res.status(400).send({ message: 'Error creating User' });
 		}
@@ -45,10 +59,13 @@ const CreateUser = async (req, res) => {
 			user: nome,
 		});
 	} catch (err) {
-		fs.unlink(req.file.path, (err) => {
-			if (err) {
-				console.log(err);
-			}
+		const params = {
+			Bucket: 'api-projectx-hub',
+			Key: req.file.originalname,
+		};
+		s3.deleteObject(params, function (err, data) {
+			if (err) console.log(err, err.stack);
+			else console.log('Deleted Successfully', data);
 		});
 		console.log(err.message);
 		res.status(500).send({ message: err.message });
@@ -130,12 +147,17 @@ const ListAccessNames = async (req, res) => {
 		accessList.index = [];
 
 		for (const elemento of accessList.ActiveFarms) {
+			if (elemento === null) {
+				continue;
+			}
+			console.log(elemento)
 			const fazenda = await farmService.findById(elemento);
 			accessList.index.push(fazenda);
 		}
 
 		return res.status(200).send(accessList.index);
 	} catch (err) {
+		console.log(err.message)
 		res.status(500).send({ message: err.message });
 	}
 };

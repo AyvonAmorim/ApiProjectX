@@ -4,6 +4,8 @@ const app = express();
 const bodyParser = require('body-parser');
 const connectDatabase = require('./database/dbConnect');
 const multer = require('multer');
+const multerS3 = require('multer-s3');
+const aws = require('aws-sdk');
 const cors = require('cors');
 
 //Import das Rotas
@@ -14,8 +16,10 @@ const FarmRouter = require('./routes/farm-routes');
 const RetiroRouter = require('./routes/retiro-routes');
 const PastoRouter = require('./routes/pasto-routes');
 
+
 //Middleware Guard
 const Guard = require('./api/guard/router-guard');
+const config = require('./config/config');
 
 connectDatabase();
 
@@ -37,12 +41,24 @@ app.use((req, res, next) => {
 	next();
 });
 
+aws.config.update({
+	accessKeyId: config.multerS3id,
+	secretAccessKey: config.multerS3key,
+	region: 'us-east-1',
+});
+
+const s3 = new aws.S3();
+
 //UPLOAD DE IMAGENS
-const storagePerfil = multer.diskStorage({
-	destination: (req, file, cb) => {
-		cb(null, 'uploads');
+const storagePerfil = multerS3({
+	s3: s3,
+	bucket: 'api-projectx-hub',
+	contentType: multerS3.AUTO_CONTENT_TYPE,
+	acl: 'public-read',
+	metadata: function (req, file, cb) {
+		cb(null, { fieldName: file.fieldname });
 	},
-	filename: (req, file, cb) => {
+	key: function (req, file, cb) {
 		cb(
 			null,
 			file.fieldname +
@@ -55,6 +71,7 @@ const storagePerfil = multer.diskStorage({
 		);
 	},
 });
+
 const uploadPerfil = multer({
 	storage: storagePerfil,
 	limits: {
